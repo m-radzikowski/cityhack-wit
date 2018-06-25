@@ -36,7 +36,6 @@ class MessageHandler(Resource):
     global wit_service
     def post(self):
         req = request.get_json(force=True)
-        print(req)
         wit_resonses = wit_service.write_to(req)
         if wit_resonses is not None:
             return wit_resonses
