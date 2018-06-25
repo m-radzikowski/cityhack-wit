@@ -1,8 +1,10 @@
-from flask import Flask
+from flask import Flask, request
+from flask_restful import reqparse, abort, Api, Resource
 import json
 from wit_ai_service.wit_ai_main import MainWitService
 
 app = Flask(__name__)
+api = Api(app)
 configuration = None
 wit_service = None
 
@@ -33,16 +35,25 @@ def get_wit_response(message_to_wit):
 
 @app.route('/')
 def main():
-    wit_resonses = get_wit_response('Tak jeszcze kosciol mi tu postawcie!')
-    for wit_response in wit_resonses:
-        value = wit_response['value']
-        confidance = wit_response['confidance']
-        print(f'Response value: {value}')
-        print(f'Response confidance is: {confidance}')
-    return 'Hello from Flask - Wit application'
+    return 'Hello from Wit Api, your endpoint for sending messages to validate is http://api_ip_address/message'
+
+
+
+class MessageHandler(Resource):
+    def post(self):
+        wit_message = request.get_json(force=True)
+        print(wit_message)
+        wit_resonses = get_wit_response('Tak jeszcze kosciol mi tu postawcie!')
+        if wit_resonses is not None:
+            return 200, json.dumps(wit_resonses)
+        else:
+            abort(404, message="Data sent {} are in wrong format.".format(wit_message))
+
+
+api.add_resource(MessageHandler, '/message')
 
 
 if __name__ == '__main__':
     read_configuation()
     set_dependencies()
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
