@@ -34,8 +34,8 @@ def main():
 class MessageHandler(Resource):
     global wit_service
     def post(self):
-        wit_message = request.get_json(force=True)
-        wit_resonses = wit_service.write_to('Tak jeszcze kosciol mi tu postawcie!')
+        req = request.get_json(force=True)
+        wit_resonses = wit_service.write_to(req)
         if wit_resonses is not None:
             return 200, json.dumps(wit_resonses)
         else:
