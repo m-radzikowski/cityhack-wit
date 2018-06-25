@@ -12,7 +12,7 @@ def read_configuation():
     global configuration
     configuration = json.loads(open('config.json', 'r').read())
     if configuration is not None:
-        print(' ## Configuration has been set.')
+        print(' ## Configuration has been read.')
     else:
         raise Exception(' ## Configuration is not set or unaccesable, check you config.json file.')
 
@@ -22,16 +22,8 @@ def set_dependencies():
     if 'wit_ai' in configuration.keys() and 'access_token' in configuration['wit_ai'].keys():
         access_token = configuration['wit_ai']['access_token']
         wit_service = MainWitService(access_token)
-
-def get_wit_response(message_to_wit):
-    resp = wit_service.write_to(message_to_wit)
-    suggested = []
-    print(resp)
-    if 'entities' in resp.keys() and 'reference' in resp['entities'].keys():
-        for sugestion in resp['entities']['reference']:
-            if all (k in sugestion.keys() for k in ('confidence','value')):
-                suggested.append({'confidance': sugestion['confidence'], 'value': sugestion['value']})
-    return suggested
+    else:
+        raise Exception('## Configuretion file has wrong format or structure. Should be json file.')
 
 @app.route('/')
 def main():
@@ -40,10 +32,10 @@ def main():
 
 
 class MessageHandler(Resource):
+    global wit_service
     def post(self):
         wit_message = request.get_json(force=True)
-        print(wit_message)
-        wit_resonses = get_wit_response('Tak jeszcze kosciol mi tu postawcie!')
+        wit_resonses = wit_service.write_to('Tak jeszcze kosciol mi tu postawcie!')
         if wit_resonses is not None:
             return 200, json.dumps(wit_resonses)
         else:
