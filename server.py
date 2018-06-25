@@ -22,8 +22,9 @@ def set_dependencies():
     if 'wit_ai' in configuration.keys() and 'access_token' in configuration['wit_ai'].keys():
         access_token = configuration['wit_ai']['access_token']
         wit_service = MainWitService(access_token)
+        print(' ## Connected to wit.ai Service')
     else:
-        raise Exception('## Configuretion file has wrong format or structure. Should be json file.')
+        raise Exception(' ## Configuretion file has wrong format or structure. Should be json file.')
 
 @app.route('/')
 def main():
@@ -35,9 +36,10 @@ class MessageHandler(Resource):
     global wit_service
     def post(self):
         req = request.get_json(force=True)
+        print(req)
         wit_resonses = wit_service.write_to(req)
         if wit_resonses is not None:
-            return 200, json.dumps(wit_resonses)
+            return wit_resonses
         else:
             abort(404, message="Data sent {} are in wrong format.".format(wit_message))
 
