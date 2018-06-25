@@ -18,7 +18,7 @@ class MainWitService:
             print(f' ## MESSAGE FILTRED: {filtered_message}')
             if len(filtered_message) > 0 and len(filtered_message) < 250:
                 wit_response = self.__client.message(filtered_message)
-                print(wit_response)
+                print(f' ## RESPONSE: {wit_response}')
                 return self.__validate_wit_response(wit_response, message_to['id'])
         return {
             'confidence': 0.0,
