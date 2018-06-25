@@ -13,12 +13,13 @@ class MainWitService:
         u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
                            "]+", flags=re.UNICODE)
         if self.__validate_request(message_to):
-            filtered_message = emoji_pattern.sub(r'', message_to['message'])[:250]
-            print(f' ## MESSAGE: {filtered_message}')
-            print(len(filtered_message))
-            wit_response = self.__client.message(filtered_message)
-            print(wit_response)
-            return self.__validate_wit_response(wit_response, message_to['id'])
+            filtered_message = emoji_pattern.sub(r'', message_to['message'])
+            print(f' ## MESSAGE NOT FILTRED {message_to}')
+            print(f' ## MESSAGE FILTRED: {filtered_message}')
+            if len(filtered_message) > 0 and len(filtered_message) < 250:
+                wit_response = self.__client.message(filtered_message)
+                print(wit_response)
+                return self.__validate_wit_response(wit_response, message_to['id'])
         return {
             'confidence': 0.0,
             'value': 'NOT_FOUND',
