@@ -36,8 +36,8 @@ class MessageHandler(Resource):
     global wit_service
     def post(self):
         client_ip_address = request.remote_addr
-        print(f'Requst form remote address {client_ip_address}')
         req = request.get_json(force=True)
+        print(f'Requst form remote address {client_ip_address}')
         wit_resonses = wit_service.write_to(req)
         if wit_resonses is not None:
             return wit_resonses
@@ -51,4 +51,4 @@ api.add_resource(MessageHandler, '/message')
 if __name__ == '__main__':
     read_configuation()
     set_dependencies()
-    app.run(host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

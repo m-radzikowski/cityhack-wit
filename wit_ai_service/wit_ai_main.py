@@ -1,12 +1,23 @@
 from wit import Wit
+import re
 
 class MainWitService:
     def __init__(self, access_token):
         self.__client = Wit(access_token)
 
     def write_to(self, message_to):
+        emoji_pattern = re.compile("["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                           "]+", flags=re.UNICODE)
         if self.__validate_request(message_to):
-            wit_response = self.__client.message(message_to['message'])
+            filtered_message = emoji_pattern.sub(r'', message_to['message'])[:250]
+            print(f' ## MESSAGE: {filtered_message}')
+            print(len(filtered_message))
+            wit_response = self.__client.message(filtered_message)
+            print(wit_response)
             return self.__validate_wit_response(wit_response, message_to['id'])
         return {
             'confidence': 0.0,
@@ -32,5 +43,6 @@ class MainWitService:
     def __validate_request(self, req_message):
         if all (k in req_message.keys() for k in ('id', 'message')):
             if type(req_message['id']) is str and type(req_message['message']) is str:
-                return True
+                if len(req_message['id']) > 0 and len(req_message['message']) > 0:
+                    return True
         return False
