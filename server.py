@@ -22,7 +22,7 @@ def set_dependencies():
     if 'wit_ai' in configuration.keys() and 'access_token' in configuration['wit_ai'].keys():
         access_token = configuration['wit_ai']['access_token']
         wit_service = MainWitService(access_token)
-        print(' ## Connected to wit.ai Service')
+        print(' ## Connected to wit.ai')
     else:
         raise Exception(' ## Configuretion file has wrong format or structure. Should be json file.')
 
@@ -49,4 +49,4 @@ api.add_resource(MessageHandler, '/message')
 if __name__ == '__main__':
     read_configuation()
     set_dependencies()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(host='0.0.0.0')
