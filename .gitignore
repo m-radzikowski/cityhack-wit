@@ -108,3 +108,6 @@ ENV/
 .idea/path_finder.iml
 .idea/vcs.xml
 .idea/workspace.xml
+
+# configuration files
+.config.json
