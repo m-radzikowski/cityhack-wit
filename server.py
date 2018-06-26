@@ -28,7 +28,7 @@ def set_dependencies():
 
 @app.route('/')
 def main():
-    return 'Hello from Wit Api, your endpoint for sending messages to validate is http://api_ip_address/message. JSON format is: {"id": string, "message": string}'
+    return 'Hello from Sentiment Recogintion API, your endpoint for sending messages for validation is http://api_ip_address/message. JSON format is: {"id": string, "message": string}'
 
 
 
@@ -38,7 +38,7 @@ class MessageHandler(Resource):
         client_ip_address = request.remote_addr
         req = request.get_json(force=True)
         print('************************* NEW REQUEST *************************')
-        print(f' ## Requst form ip address: {client_ip_address}')
+        print(f' ## Requst from ip address: {client_ip_address}')
         wit_resonse = wit_service.write_to(req)
         confidence, value = wit_resonse['confidence'], wit_resonse['value']
         print(f' ## RESPONSE: confidane : {confidence}, value: {value}')
