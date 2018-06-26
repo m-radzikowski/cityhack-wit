@@ -22,8 +22,14 @@ Write in terminal ```$python server.py```
 
 ## Posting messages and sentiment validation:
 
-Send POST request to http://server_ip_address:5000/messages
-Request Header: Content-Type: application/json
+Send POST request to:
+```
+http://server_ip_address:5000/messages
+```
+Request Header:
+```
+Content-Type: application/json
+```
 Request Body:
 ```json
 {
