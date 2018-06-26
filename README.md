@@ -27,7 +27,7 @@ Request Header: Content-Type: application/json
 Request Body:
 ```json
 {
-  "id": string that is identifying message,
-  "message": string text to validate sentiment
+  "id": "string that is identifying message",
+  "message": "string text to validate sentiment"
 }
 ```
