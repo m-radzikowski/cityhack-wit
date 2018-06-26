@@ -6,19 +6,12 @@ class MainWitService:
         self.__client = Wit(access_token)
 
     def write_to(self, message_to):
-        emoji_pattern = re.compile("["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-                           "]+", flags=re.UNICODE)
         if self.__validate_request(message_to):
-            filtered_message = emoji_pattern.sub(r'', message_to['message'])
-            print(f' ## MESSAGE NOT FILTRED {message_to}')
-            print(f' ## MESSAGE FILTRED: {filtered_message}')
-            if len(filtered_message) > 0 and len(filtered_message) < 250:
-                wit_response = self.__client.message(filtered_message)
-                print(f' ## RESPONSE: {wit_response}')
+            msg_text = message_to['message']
+            msg_text_length = len(msg_text)
+            print(f' ## MESSAGE: {msg_text}')
+            if msg_text_length in range(0, 250):
+                wit_response = self.__client.message(msg_text)
                 return self.__validate_wit_response(wit_response, message_to['id'])
         return {
             'confidence': 0.0,

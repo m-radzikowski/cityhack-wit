@@ -28,7 +28,7 @@ def set_dependencies():
 
 @app.route('/')
 def main():
-    return 'Hello from Wit Api, your endpoint for sending messages to validate is http://api_ip_address/message'
+    return 'Hello from Wit Api, your endpoint for sending messages to validate is http://api_ip_address/message. JSON format is: {"id": string, "message": string}'
 
 
 
@@ -37,12 +37,12 @@ class MessageHandler(Resource):
     def post(self):
         client_ip_address = request.remote_addr
         req = request.get_json(force=True)
-        print(f'Requst form remote address {client_ip_address}')
-        wit_resonses = wit_service.write_to(req)
-        if wit_resonses is not None:
-            return wit_resonses
-        else:
-            abort(404, message="Data sent {} are in wrong format.".format(wit_message))
+        print('************************* NEW REQUEST *************************')
+        print(f' ## Requst form ip address: {client_ip_address}')
+        wit_resonse = wit_service.write_to(req)
+        confidence, value = wit_resonse['confidence'], wit_resonse['value']
+        print(f' ## RESPONSE: confidane : {confidence}, value: {value}')
+        return wit_resonse
 
 
 api.add_resource(MessageHandler, '/message')

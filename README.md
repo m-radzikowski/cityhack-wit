@@ -17,3 +17,15 @@ Open virtual environment writing in terminal: ```$source venv/bin/activate```
 Install dependencies writing in terminal: ```$pip install -r requirements.txt```
 
 Write in terminal ```$python server.py```
+
+# Endpoints
+
+## Posting messages and sentiment validation:
+
+Send POST request to http://server_ip_address:5000/messages
+Request Header: Content-Type: application/json
+Request Body:
+{
+  "id": string that is identifying message,
+  "message": string text to validate sentiment
+}
