@@ -52,3 +52,22 @@ Request Body:
   "message": "string text to validate sentiment"
 }
 ```
+
+# Config:
+
+Your '''config.json''' should look like this:
+
+'''
+{
+  	"wit_ai": {
+      		"access_token": "C7X6YA4UQCLI64CDCWC2VJAD4UV4B6GD"
+    },
+    "watson": {
+            "url": "https://gateway.watsonplatform.net/tone-analyzer/api",
+            "username": "1eeacd3f-bcd8-4d1d-a481-7e26fa2c2e2f",
+            "password": "7xOUxb2rblIq",
+			"version": "2017-09-21"
+	}
+}
+'''
+
