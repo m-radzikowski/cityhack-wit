@@ -37,7 +37,7 @@ def set_watson_dependencies():
     if 'watson' in configuration.keys() and all (k in configuration['watson'].keys() for k in ('version', 'iam_api_key')):
         version = configuration['watson']['version']
         api_key = configuration['watson']['iam_api_key']
-        watson_service = ToneAnalyzerV3(version=version, iam_api_key=api_key)
+        watson_service = WatsonService(version, api_key)
 
 @app.route('/')
 def main():
@@ -56,12 +56,16 @@ class MessageHandler(Resource):
             wit_resonse = wit_service.write_to(req)
             confidence, value = wit_resonse['confidence'], wit_resonse['value']
             print(f' ## RESPONSE: confidane : {confidence}, value: {value}')
-            return wit_resonse, 200
+            if wit_response is not None:
+                return wit_resonse, 200
+            return {
+                'confidence': 0.0,
+                'value': 'NOT_FOUND',
+                'id': msg_id
+                } 
         elif watson_service is not None:
             try:
-                message = req['message']
-                content_type = 'application/json'
-                tone = watson_service.tone({'text': message}, content_type)
+                message = req['message']  
                 # TODO: handle tone and return proper format
                 return {'confidance': '_', 'value': '_'}, 200
             except WatsonApiException as ex:
