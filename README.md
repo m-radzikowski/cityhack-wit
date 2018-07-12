@@ -55,9 +55,9 @@ Request Body:
 
 # Config:
 
-Your '''config.json''' should look like this:
+Your ```config.json``` should look like this:
 
-'''
+```
 {
   	"wit_ai": {
       		"access_token": "C7X6YA4UQCLI64CDCWC2VJAD4UV4B6GD"
@@ -69,5 +69,5 @@ Your '''config.json''' should look like this:
 			"version": "2017-09-21"
 	}
 }
-'''
+```
 
