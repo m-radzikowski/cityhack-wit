@@ -1,4 +1,3 @@
-from wit_ai_service.wit_ai_main import MainWitService
 from watson_developer_cloud import ToneAnalyzerV3
 from watson_developer_cloud import WatsonApiException
 from utils.validation import Validator
@@ -19,12 +18,22 @@ class WatsonService:
                 }
         return None
 
-    def __init__(self, version, api_key):
-        self.__watson_service = ToneAnalyzerV3(version=version, iam_api_key=api_key)
+    def __init__(self, version, username, password, url):
+        self.__watson_service = ToneAnalyzerV3(
+            version=version,
+            username=username,
+            password=password,
+            url=url
+        )
     
     def write_to(self, message_to):
         if Validator.validate_request(message_to):
             msg_text = message_to['message']
-            tone = self.__watson_service({'text': msg_text}, self.__content_type)
+            try:
+                tone = self.__watson_service.tone({'text': msg_text}, self.__content_type)
+                print(tone)
+                return tone
+            except WatsonApiException as ex:
+                print(f'Method failed with status code {str(ex.code)}: {ex.message}')
         return None
  

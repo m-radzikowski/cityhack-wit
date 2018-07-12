@@ -2,15 +2,16 @@ from flask import Flask, request
 from flask_restful import reqparse, abort, Api, Resource
 import json
 import sys
-from wit_ai_service.wit_ai_main import MainWitService
-from watson_developer_cloud import ToneAnalyzerV3
-from watson_developer_cloud import WatsonApiException
+from watson_service.watson_main import WatsonService
+from wit_ai_service.wit_ai_main import WitService
+
+
 
 app = Flask(__name__)
 api = Api(app)
 configuration = None
 wit_service = None
-watson = None
+watson_service = None
 
 def read_configuation():
     global configuration
@@ -25,19 +26,20 @@ def set_witai_dependencies():
     global wit_service
     if 'wit_ai' in configuration.keys() and 'access_token' in configuration['wit_ai'].keys():
         access_token = configuration['wit_ai']['access_token']
-        wit_service = MainWitService(access_token)
+        wit_service = WitService(access_token)
         print(' ## Connected to wit.ai')
     else:
         raise Exception(' ## Configuretion file has wrong format or structure. Should be json file.')
 
 def set_watson_dependencies():
-    # TODO set in separate class like wit_service with validation
     global configuration
     global watson_service
-    if 'watson' in configuration.keys() and all (k in configuration['watson'].keys() for k in ('version', 'iam_api_key')):
+    if 'watson' in configuration.keys() and all (k in configuration['watson'].keys() for k in ('version', 'username', 'password', 'url')):
         version = configuration['watson']['version']
-        api_key = configuration['watson']['iam_api_key']
-        watson_service = WatsonService(version, api_key)
+        username = configuration['watson']['username']
+        password = configuration['watson']['password']
+        url = configuration['watson']['url']
+        watson_service = WatsonService(version, username, password, url)
 
 @app.route('/')
 def main():
@@ -53,23 +55,22 @@ class MessageHandler(Resource):
         print('************************* NEW REQUEST *************************')
         print(f' ## Requst from ip address: {client_ip_address}')
         if wit_service is not None:
-            wit_resonse = wit_service.write_to(req)
-            confidence, value = wit_resonse['confidence'], wit_resonse['value']
+            wit_response = wit_service.write_to(req)
+            confidence, value = wit_response['confidence'], wit_response['value']
             print(f' ## RESPONSE: confidane : {confidence}, value: {value}')
             if wit_response is not None:
-                return wit_resonse, 200
+                return wit_response, 200
             return {
                 'confidence': 0.0,
                 'value': 'NOT_FOUND',
                 'id': msg_id
                 } 
         elif watson_service is not None:
-            try:
-                message = req['message']  
-                # TODO: handle tone and return proper format
-                return {'confidance': '_', 'value': '_'}, 200
-            except WatsonApiException as ex:
-                print(f'Method failed with status code {str(ex.code)}: {ex.message}')
+            watson_response = watson_service.write_to(req)
+            print(watson_response)
+            if watson_response is not None:
+                return watson_response, 200
+            return 'Response not found', 404
         return 'Internal api server issue', 500
 
 
@@ -81,11 +82,11 @@ if __name__ == '__main__':
         read_configuation()
         if sys.argv[1] == 'witai':    
             set_witai_dependencies()
-            app.run(debug=True, host='0.0.0.0')
         elif sys.argv[1] == 'watson':
-            pass
+            set_watson_dependencies()
         else:
             print('Wrong NPL api name.')
+        app.run(debug=True, host='0.0.0.0')
     else:
         print('NPL api name hasn\'t been provided, "witai" or "watson" are avaliable options.')
-
+    

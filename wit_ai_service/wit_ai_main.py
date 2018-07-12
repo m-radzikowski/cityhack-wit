@@ -3,7 +3,7 @@ from utils.validation import Validator
 
 
 
-class MainWitService:
+class WitService:
     
     @staticmethod
     def compose_response(message_from_wit, msg_id):
@@ -27,6 +27,6 @@ class MainWitService:
             print(f' ## MESSAGE: {msg_text}')
             if msg_text_length in range(0, 250):
                 wit_response = self.__client.message(msg_text)
-                return MainWitService.compose_response(wit_response, message_to['id'])
+                return WitService.compose_response(wit_response, message_to['id'])
         return None
  

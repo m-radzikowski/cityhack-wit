@@ -110,4 +110,4 @@ ENV/
 .idea/workspace.xml
 
 # configuration files
-.config.json
+config.json
