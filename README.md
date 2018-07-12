@@ -27,10 +27,18 @@ Install dependencies writing in terminal:
 ```
 $pip install -r requirements.txt
 ```
+## Start with wit.ai engine
 
 Write in terminal
 ```
-$python server.py
+$python server.py witai
+```
+
+## Start with watson engine
+
+Write in terminal:
+```
+$python server.py watson
 ```
 
 # Endpoints

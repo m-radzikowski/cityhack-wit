@@ -58,7 +58,7 @@ class MessageHandler(Resource):
             wit_response = wit_service.write_to(req)
             confidence, value = wit_response['confidence'], wit_response['value']
             print(f' ## RESPONSE: confidane : {confidence}, value: {value}')
-            if wit_response is not None:
+            if wit_lowresponse is not None:
                 return wit_response, 200
             return {
                 'confidence': 0.0,
