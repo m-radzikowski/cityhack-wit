@@ -55,17 +55,18 @@ Request Body:
 
 # Config:
 
-Your ```config.json``` should look like this:
+Your ```config.json``` should look like JSON below:
 
+This is fake:
 ```
 {
   	"wit_ai": {
-      		"access_token": "C7X6YA4UQCLI64CDCWC2VJAD4UV4B6GD"
+      		"access_token": "CS554564FDFGERGE34534DFDFS34534"
     },
     "watson": {
             "url": "https://gateway.watsonplatform.net/tone-analyzer/api",
-            "username": "1eeacd3f-bcd8-4d1d-a481-7e26fa2c2e2f",
-            "password": "7xOUxb2rblIq",
+            "username": "123123-12fwef-2312in-1231mnkn-13132",
+            "password": "123sdfs123d342fsdf43",
 			"version": "2017-09-21"
 	}
 }
