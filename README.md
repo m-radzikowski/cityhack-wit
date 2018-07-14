@@ -47,7 +47,41 @@ $python server.py watson
 
 Send POST request to:
 ```
-http://server_ip_address:5000/message
+http://server_ip_address:5000/sentiment
+```
+Request Header:
+```
+Content-Type: application/json
+```
+Request Body:
+```json
+{
+  "id": "string that is identifying message",
+  "message": "string text to validate sentiment"
+}
+```
+
+### Response:
+
+Response Header:
+```
+Content-Type: application/json
+```
+Response Body Example:
+```json
+{
+    "confidence": 0.69015169513869,
+    "value": "NEUTRAL",
+    "id": "123"
+}
+```
+
+
+## Posting message for conversation response
+
+Send POST request to:
+```
+http://server_ip_address:5000/conversation
 ```
 Request Header:
 ```
@@ -66,17 +100,17 @@ Request Body:
 Your ```config.json``` should look like JSON below:
 
 This is fake:
-```
+```json
 {
-  	"wit_ai": {
-      		"access_token": "CS554564FDFGERGE34534DFDFS34534"
-    },
-    "watson": {
-            "url": "https://gateway.watsonplatform.net/tone-analyzer/api",
-            "username": "123123-12fwef-2312in-1231mnkn-13132",
-            "password": "123sdfs123d342fsdf43",
-			"version": "2017-09-21"
-	}
+  "wit_ai": {
+  	  "access_token": "CS554564FDFGERGE34534DFDFS34534"
+  	  },
+  "watson": {
+    "url": "https://gateway.watsonplatform.net/tone-analyzer/api",
+    "username": "123123-12fwef-2312in-1231mnkn-13132",
+    "password": "123sdfs123d342fsdf43",
+	"version": "2017-09-21"
+  }
 }
 ```
 
