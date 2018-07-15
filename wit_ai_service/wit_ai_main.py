@@ -1,9 +1,10 @@
 from wit import Wit
-from wit_ai_service.location_response_composer import LocationResponseComposer
+from wit_ai_service.location_response_composer import ResponseComposer
 from utils.validation import Validator
+from utils.logger import Logger
 
 
-class WitService(LocationResponseComposer):
+class WitService(ResponseComposer):
     
     @staticmethod
     def compose_response(message_from_wit, msg_id):
@@ -29,8 +30,7 @@ class WitService(LocationResponseComposer):
         print(' ## MESSAGE: {}'.format(msg_text))
         if msg_text_length in range(0, 250):
             wit_response = self.__client.message(msg_text)
-            print(' ## WIT RESPONDED: ')
-            print(wit_response)
+            Logger.json_print(wit_response)
             return WitService.compose_response(wit_response, message['id'])
         return None
 
@@ -40,15 +40,21 @@ class WitService(LocationResponseComposer):
         print(' ## MESSAGE: {}'.format(msg_text))
         if msg_text_length in range(0, 250):
             wit_response = self.__client.message(msg_text)
-            print(wit_response)
+            Logger.json_print(wit_response)
             if 'entities' in wit_response.keys():
                 return self.__create_response_to_msg(wit_response['entities'])
         return None
 
     def __create_response_to_msg(self, wit_response):
+        entities = []
+        # TODO: each step here inside isteed of returning response value will calculate tensor.
+        # This tensor will give response type and entities that will be used for answare
         if Validator.check_if_any_keys_in(wit_response, 'location'):
-            return self.check_for_locations_confidance(wit_response['location'])
-        return None
-
+            entities.append(self.get_with_highest_confidance(wit_response['location']))
+        if Validator.check_if_any_keys_in(wit_response, 'weather'):
+            entities.append(self.get_with_highest_confidance(wit_response['weather']))
+        if Validator.check_if_any_keys_in(wit_response, 'sentiment'):
+            entities.append(self.get_with_highest_confidance(wit_response['sentiment']))
+        return entities
 
 

@@ -1,10 +1,10 @@
 from utils.validation import Validator
 
 
-class LocationResponseComposer:
+class ResponseComposer:
 
     __location_response_logic_list = None
-    __location_fields = ['suggested', 'confidence', 'value', 'type']
+    __fields = ['confidence', 'value']
 
     def __init__(self, location_response_logic_list):
         if type(location_response_logic_list) is list:
@@ -13,9 +13,9 @@ class LocationResponseComposer:
                         single_logic, 'context', 'action'):
                     self.__location_response_logic_list = location_response_logic_list
 
-    def check_for_locations_confidance(self, locations):
-        if all (Validator.check_if_all_keys_in(location, *self.__location_fields) for location in locations):
-            best_predicted = max(locations, key=lambda l: l['confidence'])
+    def get_with_highest_confidance(self, table_to_check):
+        if all (Validator.check_if_all_keys_in(item, *self.__fields) for item in table_to_check):
+            best_predicted = max(table_to_check, key=lambda t: t[self.__fields[0]])
             return best_predicted
         return None
 
