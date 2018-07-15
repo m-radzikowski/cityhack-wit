@@ -1,5 +1,5 @@
 from wit import Wit
-from wit_ai_service.location_response_composer import ResponseComposer
+from wit_ai_service.response_composer import ResponseComposer
 from utils.validation import Validator
 from utils.logger import Logger
 
