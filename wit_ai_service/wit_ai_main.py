@@ -23,7 +23,6 @@ class WitService(ResponseComposer):
         super().__init__(location_response_logic_list)
         self.__client = Wit(access_token)
 
-
     def write_to(self, message):
         msg_text = message['message']
         msg_text_length = len(msg_text)
@@ -55,6 +54,8 @@ class WitService(ResponseComposer):
             entities.append(self.get_with_highest_confidance(wit_response['weather']))
         if Validator.check_if_any_keys_in(wit_response, 'sentiment'):
             entities.append(self.get_with_highest_confidance(wit_response['sentiment']))
+        if Validator.check_if_any_keys_in(wit_response, 'notable_person'):
+            entities.append(self.get_with_highest_confidance(wit_response, 'notable_person'))
         return entities
 
 
